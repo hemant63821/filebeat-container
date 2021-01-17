@@ -1,0 +1,17 @@
+version: '3.7'
+networks: 
+  default:
+    external:
+      name: vr0
+services:
+  filebeatlogger:
+    container_name : system-logger
+    build : filebeat
+    user: root
+    ports:
+      - 12204:12204
+    volumes:
+       - /usr/share/logData/putaway:/logdata/putaway:ro
+       - /var/log:/logdata/system:ro
+       - /var/log/tuptime:/logdata/uptime:ro
+    restart: always

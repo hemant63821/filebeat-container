@@ -1,0 +1,61 @@
+filebeat:
+   inputs:
+     -
+       paths:
+         - /logdata/putaway/*.log
+       input_type: log
+       multiline.pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}'
+       multiline.negate: true
+       multiline.match: after
+       fields:
+         tags: ["putaway"]
+         server_name: {{ node_id | default('local') }}
+       fields_under_root: true 
+
+     -
+       paths:
+         - /logdata/system/syslog
+       multiline.pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}'
+       multiline.negate: true
+       multiline.match: after
+       fields:
+         tags: ["system_syslog"]
+         server_name: {{ node_id | default('local') }}
+       fields_under_root: true 
+
+     -
+       paths:
+         - /logdata/system/auth.log
+       multiline.pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}'
+       multiline.negate: true
+       multiline.match: after
+       fields:
+         tags: ["system_authorization"]
+         server_name: {{ node_id | default('local') }}
+       fields_under_root: true
+
+     -
+       paths:
+         - /logdata/system/kern.log
+       multiline.pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}'
+       multiline.negate: true
+       multiline.match: after
+       fields:
+         tags: ["system_kernel"]
+         server_name: {{ node_id | default('local') }}
+       fields_under_root: true
+
+     -
+       paths:
+         - /logdata/uptime/server_uptime_report.log
+       multiline.pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}'
+       multiline.negate: true
+       multiline.match: after
+       fields:
+         tags: ["uptime_report"]
+         server_name: {{ node_id | default('local') }}
+       fields_under_root: true
+
+output:
+  logstash:
+    hosts: ["3.139.148.43:5043"]
